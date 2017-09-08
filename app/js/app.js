@@ -45,7 +45,7 @@ app.factory("factorygetAllRecords", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://http://leavetrackers.herokuapp.com/recordsroute/getAll',
+        url: 'http://leavetrackers.herokuapp.com/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -141,7 +141,7 @@ app.controller("userModule", function($scope, $http, $q,$window) {
 
             $http({
                 method: 'POST',
-                url: 'http://localhost:3000/recordsroute/createNewEmployee',
+                url: 'http://leavetrackers.herokuapp.com/recordsroute/createNewEmployee',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
