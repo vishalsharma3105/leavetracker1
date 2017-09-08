@@ -36,7 +36,7 @@ app.config(function($routeProvider, $locationProvider) {
 
 
 
-app.constant("homeAddress", "http://localhost:3000/")
+app.constant("homeAddress", "https://localhost:3000/")
 
 app.factory("factorygetAllRecords", function($http) {
 
@@ -45,7 +45,7 @@ app.factory("factorygetAllRecords", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://localhost:3000/recordsroute/getAll',
+        url: 'https://localhost:3000/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -74,7 +74,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://localhost:3000/recordsroute/getbyId',
+        url: 'https://localhost:3000/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
@@ -141,7 +141,7 @@ app.controller("userModule", function($scope, $http, $q,$window) {
 
             $http({
                 method: 'POST',
-                url: 'http://localhost:3000/recordsroute/createNewEmployee',
+                url: 'https://localhost:3000/recordsroute/createNewEmployee',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -166,7 +166,7 @@ app.controller("userModule", function($scope, $http, $q,$window) {
 
         $http({
             method: 'POST',
-            url: 'http://localhost:3000/recordsroute/loginUser',
+            url: 'https://localhost:3000/recordsroute/loginUser',
             headers: {
                 'Accept': 'application/json',
                 // "X-Login-Ajax-call": 'true'
