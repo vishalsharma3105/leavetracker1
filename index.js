@@ -1,5 +1,5 @@
 var express = require('express');
-var port = process.env.PORT || 3000; 
+var port = process.env.PORT || 8000; 
 var app = express();
 var bodyParser = require('body-parser')
 
@@ -11,12 +11,6 @@ var bodyParser = require('body-parser')
 
 
 app.use(express.static("app"));  
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  
-});
   
 app.get('/', function (req, res) {  
     res.redirect('/');  

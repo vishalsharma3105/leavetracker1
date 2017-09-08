@@ -45,7 +45,7 @@ app.factory("factorygetAllRecords", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://localhost:3000/recordsroute/getAll',
+        url: 'http://http://leavetrackers.herokuapp.com/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -74,7 +74,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://localhost:3000/recordsroute/getbyId',
+        url: 'http://lhttp://leavetrackers.herokuapp.com/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
