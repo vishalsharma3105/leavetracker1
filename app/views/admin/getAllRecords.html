@@ -1,0 +1,9 @@
+<div class="container-fluid" ng-controller="getAllRecords">
+    {{5+10}}
+    <span  class="glyphicon glyphicon-minus"></span>
+    <div id="accordianParent" ng-repeat="item in array" ng-click="accordion.current = item._id">
+        {{item.employeeName}}  <span style ="float:right;font-weight: bolder;" ng-show="accordion.current != item._id" >+</span><span style="float:right;font-weight: bolder;" ng-show="accordion.current == item._id" >-</span>
+        <div ng-show="accordion.current == item._id">
+            <div ng-repeat="sub in item.leaves">{{sub.date}}</div>
+        </div>
+        <div>

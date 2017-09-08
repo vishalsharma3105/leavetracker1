@@ -1,0 +1,45 @@
+<div class="container-fluid" ng-controller="userModule">
+    <div class="row" style="margin-top: 20px">
+    <div class="col"></div>
+    <div class="col" >
+    	<div class="row">
+    		<h2  style="padding-left: 15px;">Register</h2>
+    	</div>
+        <form>
+            <div class="form-group">
+                <!-- <label for="InputEmployeeID">Employee Id</label> -->
+                <input type="Text" ng-model="register.employeeId" class="form-control" id="InputEmployeeID" aria-describedby="emailHelp" placeholder="Enter EmployeeID">
+               
+            </div>
+            <div class="form-group">
+                <!-- <label for="InputEmployeeName">Employee Name</label> -->
+                <input type="Text" ng-model="register.employeeName"  class="form-control" id="InputEmployeeName" placeholder="Employee Name">
+            </div>
+            <div class="form-group">
+                <!-- <label for="InputManagerID">Manager ID</label> -->
+                <input type="Text" ng-model="register.managerId" class="form-control" id="InputManagerID" placeholder="Manager ID">
+            </div>
+            <div class="form-group">
+                <!-- <label for="InputManagerName">Manager Name</label> -->
+                <input type="Text" ng-model="register.managerName" class="form-control" id="InputManagerName" placeholder="Manager Name">
+            </div>
+            <div class="form-group">
+                <!-- <label for="InputEmployeeEmail">Employee Email</label> -->
+                <input type="email" ng-model="register.email" class="form-control" id="InputEmployeeEmail" placeholder="Employee Email">
+            </div>
+            <div class="form-group">
+                <!-- <label for="InputEmployeePassword">Create Password</label> -->
+                <input type="password" ng-model="register.password" class="form-control" id="InputEmployeePassword" placeholder="Enter password">
+            </div>
+            <div class="form-group">
+               
+                <input type="password" ng-model="register.confirmPasswordCheck"  class="form-control" id="InputEmployeeConfirmPassword" placeholder="Re Enter Password">
+              
+            </div>
+            <button type="submit" ng-click="registerEmployee()" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="col"></div>
+    </div>
+
+</div>
