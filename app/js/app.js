@@ -45,7 +45,7 @@ app.factory("factorygetAllRecords", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getAll',
+        url: 'http://localhost:8000/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -74,7 +74,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getbyId',
+        url: 'http://localhost:8000/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
@@ -129,6 +129,14 @@ app.controller("userModule", function($scope, $http, $q,$window) {
     $scope.register = {};
     $scope.login = {};
 
+
+    $scope.goToRegister = function(){
+
+             
+              $window.location.href = '/#!/registration';
+
+    }
+
     $scope.registerEmployee = function() {
 
         if ($scope.register.password != $scope.register.confirmPasswordCheck) {
@@ -141,7 +149,7 @@ app.controller("userModule", function($scope, $http, $q,$window) {
 
             $http({
                 method: 'POST',
-                url: 'http://leavetrackers.herokuapp.com/recordsroute/createNewEmployee',
+                url: 'http://localhost:8000/recordsroute/createNewEmployee',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -166,7 +174,7 @@ app.controller("userModule", function($scope, $http, $q,$window) {
 
         $http({
             method: 'POST',
-            url: 'http://leavetrackers.herokuapp.com/recordsroute/loginUser',
+            url: 'http://localhost:8000/recordsroute/loginUser',
             headers: {
                 'Accept': 'application/json',
                 // "X-Login-Ajax-call": 'true'
@@ -187,7 +195,11 @@ app.controller("userModule", function($scope, $http, $q,$window) {
     }
 
 
+    $scope.Employeelogout = function(){
 
+            localStorage.removeItem('LoggedInemployeeDetails', $window.location.href = '/#!/login');
+
+    }
 
 
 });
