@@ -9,13 +9,14 @@ var leaveRecord = new Schema({
     email:String,
     password:String,
     leaves: [{
-         leaveID:String,
-         startDate: Date, 
-         endDate: Date,
+         //leaveID:String,
+         // startDate: Date, 
+         // endDate: Date,
+         date:Date,
          leaveType: String,
          timeStamp: Date,
-         deleteFlag:String,
-         count:String        
+         deleteFlag:String
+        // count:String        
      }]    
 })
 

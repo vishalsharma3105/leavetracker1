@@ -1,6 +1,7 @@
 var express = require('express');
 var port = process.env.PORT || 8000; 
 var app = express();
+var fs = require('fs');
 var bodyParser = require('body-parser')
 
 // app.use(function(req, res, next) {
@@ -21,7 +22,7 @@ app.get('/', function (req, res) {
 
 var recordsRoute = require('./routes/recordsRoute')
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://vishalsharma3105:123456@ds149763.mlab.com:49763/meanstackvishal');
+mongoose.connect('mongodb://vishalsharma3105:123456@ds149763.mlab.com:49763/meanstackvishal', { useMongoClient: true });
 
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies

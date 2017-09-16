@@ -7,7 +7,7 @@ var userLogin = require('../models/userLogin')
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var superSecret = require('../config');
-
+mongoose.Promise = Promise;
 var bcrypt = require('bcrypt-nodejs');
 
 const SALT_ROUNDS = 10;
@@ -73,6 +73,13 @@ router.post('/createNewEmployee', function(req, res) {
 
 router.post('/loginUser', function(req, res) {
 
+    // if (req.body.employeeId !='' || req.body.password !='')
+    // {
+
+    //     res.end( {success:false,
+    //         msg:"Please Enter Credentials"}
+    //         );
+    // }
     var userLogin1 = new userLogin({
 
         employeeId: req.body.employeeId,
@@ -127,7 +134,7 @@ router.post('/loginUser', function(req, res) {
                     })
                 } else {
 
-                    res.json("Paasword is Wrong baby")
+                    res.json({success:false,message:"Paasword is Wrong baby"})
                 }
             });
         }
@@ -158,26 +165,36 @@ hashedPassword = function(password) {
 
 // Employee can update his leave from here.
 router.post('/updateLeave', function(req, res) {
-    if (!req.body._id) {
+    console.log(req.body)
+    if (!req.body._id || req.body.leaves.length===0) {
         res.json({
-            success: false,
+            success: false, 
             msg: "Data not provided"
         })
     } else {
         leaveRecords.findById({ _id: req.body._id }, function(err, data) {
+            console.log("yahan tak agaya");
             if (err) res.status(500).json({
+
                 success: false,
                 msg: "Database error"
             })
 
             else {
-                //data.status = 'done'
-                //data.completed_date = new Date()
-                var date1 = new Date(req.body.startDate);
-                var date2 = new Date(req.body.endDate);
-                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                data.leaves.push({ leaveId: data.leaves.length, startDate: req.body.startDate, endDate: req.body.endDate, leaveType: req.body.leaveType, timeStamp: Date(), deleteFlag: req.body.deleteFlag, count: diffDays+1 });
+                 console.log("yahan tak  b  agaya");
+                var i =0
+                for(i=0;i<req.body.leaves.length;i++)
+                {
+                    var leaveObject = {
+                        date:req.body.leaves[i],
+                        leaveType:req.body.leaveType,
+                        timeStamp:Date(),
+                        deleteFlag:'N'
+                    } 
+                    data.leaves.push(leaveObject);
+
+                }
+                    
                 data.save(function(err, newData) {
                     if (err)
 

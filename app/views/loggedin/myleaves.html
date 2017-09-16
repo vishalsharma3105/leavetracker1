@@ -1,51 +1,65 @@
-<div ng-controller="getAllRecords">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
-        <a class="navbar-brand" href="#">Leave Management</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto" >
-                <li class="nav-item active" >
-                    <a class="nav-link" href="#">Get All<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item"> 
-                    <a class="nav-link" href="#">Register Yourself</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-click="Employeelogout()">Log Out</button>
+
+
+<div style="margin-left: 20px;padding-left: 20px;">
+    <div ng-controller="getAllRecords">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Leave Management</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Get All<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Register Yourself</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-click="Employeelogout()">Log Out
+                </button>
+            </div>
+        </nav>
+        <div class="jumbotron" ng-controller="getAllRecords">
+            <h1 class="display-5">Hello, {{employeeData.employeeName}}</h1>
+            <p class="lead">
+                <h6>Employee ID: </h6>{{employeeData.employeeId}}</p>
+            <p class="lead">
+                <h6>Email</h6>{{employeeData.email}}</p>
+            <p class="lead">
+                <h6>Your are currently reporting to : </h6> {{employeeData.managerName}}</p>
         </div>
-    </nav>
-<div class="jumbotron" ng-controller="getAllRecords">
-  <h1 class="display-5">Hello, {{employeeData.employeeName}}</h1>
-  <p class="lead"><h6>Employee ID: </h6>{{employeeData.employeeId}}</p>
-  <p class="lead"><h6>Email</h6>{{employeeData.email}}</p>
-  {{employeeData.leaves}}
-  <p class="lead"><h6>Your are currently reporting to : </h6> {{employeeData.managerName}}</p>
-  <hr class="my-4">
-  <table class="table table-striped">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Leave Type</th>
-      <th>Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat='a in employeeDataapi.leaves'>
-      <th scope="row">1</th>
-      <td>{{a.startDate | date}}</td>
-      <td>{{a.endDate | date}}</td>
-      <td>{{a.leaveType}}</td>
-      <td>{{a.count}}</td>
-     
-    </tr> 
-  </tbody>
-</table>
+        <hr class="my-4">
+        <div class="row">
+            <datecard ng-repeat="a in employeeDataapi.leaves" class="col-2"></datecard>
+        </div>
+        <hr>
+        <button type="submit" class="btn btn-secondary" ng-click="toggleCalenderForLeaves()">Apply Leaves</button>
+        <div ng-show="toggleCalender">
+            <div class="row" id="applyLeaveStart">
+                <div class="col-6">
+                    <multiple-date-picker id="multiple-date-pickerid" days-not-allowed="['2017-09-05','2017-09-15']" week-days-off="[0, 6]" moment="moment" ng-model="updateLeaveObj.leaves"></multiple-date-picker>
+                </div>
+                <div class="col-6">
+                    <div class="row" style="padding-top: 50px;">
+                         <h6>Leave Type:</h6>
+                        <div class="col-4" >
+                            <select id="selectLeaveType" ng-model="updateLeaveObj.leaveType" class="custom-select">
+                                <option ng-repeat="lt in leaveTypes" >{{lt}}</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" ng-click="updateLeaves()" class="btn btn-primary">
+                                Update Leaves
+                            </button>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>	
