@@ -81,7 +81,7 @@ app.run(function($rootScope, $location) {
                     })
                 })
 
-app.constant("homeAddress", "http://localhost:3000/")
+app.constant("homeAddress", "http://http://leavetrackers.herokuapp.com/")
 
 app.factory("factorygetAllRecords", function($http) {
 
@@ -90,7 +90,7 @@ app.factory("factorygetAllRecords", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://localhost:8000/recordsroute/getAll',
+        url: 'http://leavetrackers.herokuapp.com/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -121,7 +121,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://localhost:8000/recordsroute/getbyId',
+        url: 'http://leavetrackers.herokuapp.com/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
@@ -241,7 +241,7 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
 
              $http({
                  method: 'POST',
-                url: 'http://localhost:8000/recordsroute/updateLeave',
+                url: 'http://leavetrackers.herokuapp.com/recordsroute/updateLeave',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -294,7 +294,7 @@ app.controller("userModule", function($scope, $http, $q, $window) {
 
             $http({
                 method: 'POST',
-                url: 'http://localhost:8000/recordsroute/createNewEmployee',
+                url: 'http://leavetrackers.herokuapp.com/recordsroute/createNewEmployee',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -324,7 +324,7 @@ app.controller("userModule", function($scope, $http, $q, $window) {
         localStorage.removeItem('LoggedInemployeeDetails');
         $http({
             method: 'POST',
-            url: 'http://localhost:8000/recordsroute/loginUser',
+            url: 'http://leavetrackers.herokuapp.com/recordsroute/loginUser',
             headers: {
                 'Accept': 'application/json',
                 // "X-Login-Ajax-call": 'true'
