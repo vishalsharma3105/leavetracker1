@@ -2,7 +2,7 @@ $(function() {
     $("#datepicker").datepicker();
 });
 
-var app = angular.module('app', ['ngRoute','multipleDatePicker'])
+var app = angular.module('app', ['ngRoute','multipleDatePicker','duScroll'])
 
 // app.directive("datepicker", function() {
 //     return {
@@ -74,14 +74,14 @@ app.run(function($rootScope, $location) {
 
                         if(!localStorage.getItem("LoggedInemployeeDetails"))
                         {
-                        if (!(next.templateUrl == "/views/usermodule/login.html")) {
+                        if (!((next.templateUrl == "/views/usermodule/login.html") || (next.templateUrl == "/views/usermodule/registration.html") ) ) {
                             $location.path("/login");
                         }
                     }
                     })
                 })
 
-app.constant("homeAddress", "leavetrackers.herokuapp.com")
+app.constant("homeAddress", "http://localhost:3000/")
 
 app.factory("factorygetAllRecords", function($http) {
 
@@ -90,7 +90,7 @@ app.factory("factorygetAllRecords", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getAll',
+        url: 'http://localhost:8000/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -121,7 +121,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getbyId',
+        url: 'http://localhost:8000/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
@@ -150,7 +150,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
 
 
 
-app.controller("getAllRecords", function($scope, $http, factorygetAllRecords, factorygetEmployeeRecord, $q) {
+app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRecords, factorygetEmployeeRecord, $q) {
 
 
     //$scope.moment = require('moment');
@@ -163,8 +163,19 @@ app.controller("getAllRecords", function($scope, $http, factorygetAllRecords, fa
 
     $scope.toggleCalenderForLeaves = function() {
 
-        $scope.toggleCalender = !$scope.toggleCalender;
         
+    
+        var scrollToApply = document.getElementById("applyLeaveStart");
+        var scrollToApplyRe = document.getElementById("dategrids");
+        if($scope.toggleCalender==false)
+        {
+         $document.scrollToElementAnimated(scrollToApply, -600, 2500);
+        }
+        else
+        {
+            $document.scrollToElementAnimated(scrollToApplyRe, 200, 2500);
+        }
+        $scope.toggleCalender = !$scope.toggleCalender;
 
     }
 
@@ -181,7 +192,7 @@ app.controller("getAllRecords", function($scope, $http, factorygetAllRecords, fa
     factorygetEmployeeRecord.then(function(successResponse) {
 
 
-        console.log("getbyid=== " + successResponse);
+        //console.log("getbyid=== " + successResponse);
         $scope.employeeDataapi = successResponse;
 
 
@@ -204,6 +215,19 @@ app.controller("getAllRecords", function($scope, $http, factorygetAllRecords, fa
 
         } else {
 
+                // to check of leaves dates are already applied:
+      
+            for (var i=0;i<$scope.updateLeaveObj.leaves.length;i++)
+            {
+                if($scope.employeeDataapi.leaves.includes($scope.updateLeaveObj.leaves[i]) )
+                {
+                    $scope.updateLeaveObj.leaves.splice(i,1);
+                    alert("removed" + $scope.updateLeaveObj.leaves[i])
+                }
+            }
+
+            console.log($scope.updateLeaveObj.leaves);
+
             alert("at the right place")
             console.log($scope.updateLeaveObj.leaves);
             alert($scope.updateLeaveObj.leaves);
@@ -217,7 +241,7 @@ app.controller("getAllRecords", function($scope, $http, factorygetAllRecords, fa
 
              $http({
                  method: 'POST',
-                url: 'http://leavetrackers.herokuapp.com/recordsroute/updateLeave',
+                url: 'http://localhost:8000/recordsroute/updateLeave',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -225,16 +249,13 @@ app.controller("getAllRecords", function($scope, $http, factorygetAllRecords, fa
                 data: JSON.stringify($scope.updateLeaveObj)
             }).then(function(response) {
                 if (response.status == 200) {
-                    $scope.register = {};
-                    alert(response.data);
-                    factorygetEmployeeRecord.then(function(successResponse) {
+                    console.log("vishal")
+                  //  console.log(response.data.leaves[0]);
+                    console.log(response.data.data.leaves);
+                        
+                        $scope.employeeDataapi.leaves = response.data.data.leaves;
+                        $scope.updateLeaveObj.leaves  = [];
 
-
-                        console.log("getbyid=== " + successResponse);
-                        $scope.employeeDataapi = successResponse;
-
-                               
-                    })
                 } else {
                     alert("failed");
                 }
@@ -273,7 +294,7 @@ app.controller("userModule", function($scope, $http, $q, $window) {
 
             $http({
                 method: 'POST',
-                url: 'http://leavetrackers.herokuapp.com/recordsroute/createNewEmployee',
+                url: 'http://localhost:8000/recordsroute/createNewEmployee',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -303,7 +324,7 @@ app.controller("userModule", function($scope, $http, $q, $window) {
         localStorage.removeItem('LoggedInemployeeDetails');
         $http({
             method: 'POST',
-            url: 'http://leavetrackers.herokuapp.com/recordsroute/loginUser',
+            url: 'http://localhost:8000/recordsroute/loginUser',
             headers: {
                 'Accept': 'application/json',
                 // "X-Login-Ajax-call": 'true'
