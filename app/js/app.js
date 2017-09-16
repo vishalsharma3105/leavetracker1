@@ -81,7 +81,7 @@ app.run(function($rootScope, $location) {
                     })
                 })
 
-app.constant("homeAddress", "http://http://leavetrackers.herokuapp.com/")
+app.constant("homeAddress", "http://leavetrackers.herokuapp.com/")
 
 app.factory("factorygetAllRecords", function($http) {
 
@@ -121,7 +121,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getbyId',
+        url: 'leavetrackers.herokuapp.com/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
@@ -169,11 +169,11 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
         var scrollToApplyRe = document.getElementById("dategrids");
         if($scope.toggleCalender==false)
         {
-         $document.scrollToElementAnimated(scrollToApply, -600, 2500);
+         $document.scrollToElementAnimated(scrollToApply, -600, 1000);
         }
         else
         {
-            $document.scrollToElementAnimated(scrollToApplyRe, 200, 2500);
+            $document.scrollToElementAnimated(scrollToApplyRe, 200, 1000);
         }
         $scope.toggleCalender = !$scope.toggleCalender;
 
@@ -200,6 +200,33 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
 
     })
 
+    //function to delete leaves
+     $scope.deleteLeave = function(id){
+
+        dataObj = {leaveId:id,_id:$scope.employeeData._id}
+   //   alert(id);
+
+            _id = id;   
+         $http({
+                method: 'POST',
+                url: 'http://leavetrackers.herokuapp.com/recordsroute/deleteLeavesbyId',
+                headers: {
+                    'Accept': 'application/json',
+                    // "X-Login-Ajax-call": 'true'
+                },
+                data: JSON.stringify(dataObj)
+            }).then(function(response) {
+                if (response.status == 200) {
+                  //  $scope.register = {};
+                    console.log(response.data.data.leaves);
+                     $scope.employeeDataapi.leaves = response.data.data.leaves;
+
+                } else {
+                    alert("failed");
+                }
+            });
+
+    }
 
     $scope.updateLeaves = function() {
 

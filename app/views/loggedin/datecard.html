@@ -4,6 +4,7 @@
     <h4 class="card-title">{{a.leaveId}}</h4>
     <h6 class="card-subtitle mb-2 text-muted">{{a.date| date}}</h6>
     <p class="card-text">{{a.leaveType}}</p>
-    <a href="#" class="cd-link">Delete</a>
+    <button type="button" ng-click="deleteLeave(a._id)" class="btn btn-link">Delete</button>
+
   </div>
 </div>
