@@ -243,15 +243,7 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
         } else {
 
                 // to check of leaves dates are already applied:
-      
-            for (var i=0;i<$scope.updateLeaveObj.leaves.length;i++)
-            {
-                if($scope.employeeDataapi.leaves.includes($scope.updateLeaveObj.leaves[i]) )
-                {
-                    $scope.updateLeaveObj.leaves.splice(i,1);
-                    alert("removed" + $scope.updateLeaveObj.leaves[i])
-                }
-            }
+    
 
             console.log($scope.updateLeaveObj.leaves);
 
