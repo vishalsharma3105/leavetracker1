@@ -121,7 +121,7 @@ app.factory("factorygetEmployeeRecord", function($http) {
     var a = $http({
 
         method: 'POST',
-        url: 'leavetrackers.herokuapp.com/recordsroute/getbyId',
+        url: 'http://leavetrackers.herokuapp.com/recordsroute/getbyId',
 
         headers: {
             'Accept': 'application/json'
