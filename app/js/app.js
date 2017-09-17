@@ -2,7 +2,7 @@ $(function() {
     $("#datepicker").datepicker();
 });
 
-var app = angular.module('app', ['ngRoute','multipleDatePicker','duScroll'])
+var app = angular.module('app', ['ngRoute', 'multipleDatePicker', 'duScroll'])
 
 // app.directive("datepicker", function() {
 //     return {
@@ -29,7 +29,7 @@ var app = angular.module('app', ['ngRoute','multipleDatePicker','duScroll'])
 app.directive("datecard", function() {
     return {
 
-         templateUrl: '/views/loggedin/datecard.html'
+        templateUrl: '/views/loggedin/datecard.html'
 
     }
 });
@@ -70,27 +70,28 @@ app.config(function($routeProvider, $locationProvider) {
 });
 
 app.run(function($rootScope, $location) {
-                    $rootScope.$on("$routeChangeStart", function (event, next, current) {
+    $rootScope.$on("$routeChangeStart", function(event, next, current) {
 
-                        if(!localStorage.getItem("LoggedInemployeeDetails"))
-                        {
-                        if (!((next.templateUrl == "/views/usermodule/login.html") || (next.templateUrl == "/views/usermodule/registration.html") ) ) {
-                            $location.path("/login");
-                        }
-                    }
-                    })
-                })
+        if (!localStorage.getItem("LoggedInemployeeDetails")) {
+            if (!((next.templateUrl == "/views/usermodule/login.html") || (next.templateUrl == "/views/usermodule/registration.html"))) {
+                $location.path("/login");
+            }
+        }
+    })
+})
 
-app.constant("homeAddress", "http://leavetrackers.herokuapp.com/")
+app.constant("homeAddress", "http://localhost:8000")
 
-app.factory("factorygetAllRecords", function($http) {
+app.factory("factorygetAllRecords", function($http, homeAddress) {
 
+
+    alert(homeAddress);
     var EmployeeDetails = localStorage.getItem("LoggedInemployeeDetails")
     console.log(EmployeeDetails);
     var a = $http({
 
         method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getAll',
+        url: homeAddress + '/recordsroute/getAll',
 
         headers: {
             'Accept': 'application/json'
@@ -112,37 +113,34 @@ app.factory("factorygetAllRecords", function($http) {
 })
 
 // Factory for Get By ID
-app.factory("factorygetEmployeeRecord", function($http) {
+app.factory("factorygetEmployeeRecord", function($http, homeAddress) {
 
     var EmployeeDetails = localStorage.getItem("LoggedInemployeeDetails")
-    if(EmployeeDetails)
-    {
-    console.log(EmployeeDetails);
-    var a = $http({
+    if (EmployeeDetails) {
+        console.log(EmployeeDetails);
+        var a = $http({
 
-        method: 'POST',
-        url: 'http://leavetrackers.herokuapp.com/recordsroute/getbyId',
+            method: 'POST',
+            url: homeAddress + '/recordsroute/getbyId',
 
-        headers: {
-            'Accept': 'application/json'
-        },
-        data: EmployeeDetails
-    }).then(function(response) {
-        if (response.status == 200) {
-            //$scope.loading = false;
-            // $scope.responseContactsArray = response.data.contacts;
-            console.log('hello')
-            console.log(response.data)
-            return response.data;
-        } else {
-            // failed
-        }
-    });
-    return a;
-    }
-    else
-    {
-         $window.location.href = '/#!/login';
+            headers: {
+                'Accept': 'application/json'
+            },
+            data: EmployeeDetails
+        }).then(function(response) {
+            if (response.status == 200) {
+                //$scope.loading = false;
+                // $scope.responseContactsArray = response.data.contacts;
+                console.log('hello')
+                console.log(response.data)
+                return response.data;
+            } else {
+                // failed
+            }
+        });
+        return a;
+    } else {
+        $window.location.href = '/#!/login';
     }
 })
 
@@ -150,29 +148,67 @@ app.factory("factorygetEmployeeRecord", function($http) {
 
 
 
-app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRecords, factorygetEmployeeRecord, $q) {
+app.controller("getAllRecords", function($scope, $document, $http, factorygetAllRecords, factorygetEmployeeRecord, $q, homeAddress) {
 
+    // array to create month-year dropdown
+
+    $scope.monthsForDropDown = [
+        { Value: 0, Text: 'Januaury' },
+        { Value: 1, Text: 'Februaury' },
+        { Value: 2, Text: 'March' },
+        { Value: 3, Text: 'April' },
+        { Value: 4, Text: 'May' },
+        { Value: 5, Text: 'june' },
+        { Value: 6, Text: 'July' },
+        { Value: 7, Text: 'August' },
+        { Value: 8, Text: 'September' },
+        { Value: 9, Text: 'October' },
+        { Value: 10, Text: 'November' },
+        { Value: 11, Text: 'December' }
+    ]
+
+
+    $scope.yearsForDropDown = [2017, 2018, 2019, 2020, 2021, 2022]
+    alert($scope.getMonths)
+
+        var dateNow = new Date();
+         $scope.currentMonth =  dateNow.getMonth();
+          $scope.currentYear =  dateNow.getFullYear();
+    
+    
 
     //$scope.moment = require('moment');
     //$scope.moment.locale('fr-FR');
     $scope.leaveTypes = ['Sick', 'Casual', 'Floating', 'Earned'];
 
+    
+
+    $scope.selectedMonthFilter = function(element) {
+        var date = new Date(element.date)
+        if (!$scope.selectedMonth) return true;
+        return date.getMonth() == $scope.selectedMonth;
+    }
+
+    $scope.selectedYearFilter = function(element) {
+        var date = new Date(element.date)
+        if (!$scope.selectedYear) return true;
+        return date.getFullYear() == $scope.selectedYear;
+    }
+
+
     $scope.toggleCalender = false;
 
-    $scope.updateLeaveObj = { leaves:[], leaveType: '', _id: '',deleteFlag:'' }
+    $scope.updateLeaveObj = { leaves: [], leaveType: '', _id: '', deleteFlag: '' }
 
     $scope.toggleCalenderForLeaves = function() {
 
-        
-    
+
+
         var scrollToApply = document.getElementById("applyLeaveStart");
         var scrollToApplyRe = document.getElementById("dategrids");
-        if($scope.toggleCalender==false)
-        {
-         $document.scrollToElementAnimated(scrollToApply, -600, 1000);
-        }
-        else
-        {
+        if ($scope.toggleCalender == false) {
+            $document.scrollToElementAnimated(scrollToApply, -600, 1000);
+        } else {
             $document.scrollToElementAnimated(scrollToApplyRe, 200, 1000);
         }
         $scope.toggleCalender = !$scope.toggleCalender;
@@ -201,66 +237,66 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
     })
 
     //function to delete leaves
-     $scope.deleteLeave = function(id){
+    $scope.deleteLeave = function(id) {
 
-        dataObj = {leaveId:id,_id:$scope.employeeData._id}
-   //   alert(id);
+        dataObj = { leaveId: id, _id: $scope.employeeData._id }
+        //   alert(id);
 
-            _id = id;   
-         $http({
-                method: 'POST',
-                url: 'http://leavetrackers.herokuapp.com/recordsroute/deleteLeavesbyId',
-                headers: {
-                    'Accept': 'application/json',
-                    // "X-Login-Ajax-call": 'true'
-                },
-                data: JSON.stringify(dataObj)
-            }).then(function(response) {
-                if (response.status == 200) {
-                  //  $scope.register = {};
-                    console.log(response.data.data.leaves);
-                     $scope.employeeDataapi.leaves = response.data.data.leaves;
+        _id = id;
+        $http({
+            method: 'POST',
+            url: homeAddress + '/recordsroute/deleteLeavesbyId',
+            headers: {
+                'Accept': 'application/json',
+                // "X-Login-Ajax-call": 'true'
+            },
+            data: JSON.stringify(dataObj)
+        }).then(function(response) {
+            if (response.status == 200) {
+                //  $scope.register = {};
+                console.log(response.data.data.leaves);
+                $scope.employeeDataapi.leaves = response.data.data.leaves;
 
-                } else {
-                    alert("failed");
-                }
-            });
+            } else {
+                alert("failed");
+            }
+        });
 
     }
 
     $scope.updateLeaves = function() {
 
-        
-        if ($scope.updateLeaveObj.leaves.length===0) {
+
+        if ($scope.updateLeaveObj.leaves.length === 0) {
             alert("No Dates have been selected");
             $scope.updateLeaveObj.leaveType = '';
-        
+
         } else if (!$scope.updateLeaveObj.leaveType) {
 
             alert("Leave Type is Empty");
-              $scope.updateLeaveObj.leaves  = [];
+            $scope.updateLeaveObj.leaves = [];
 
         } else {
 
-                // to check of leaves dates are already applied:
-    
+            // to check of leaves dates are already applied:
+
 
             console.log($scope.updateLeaveObj.leaves);
 
             alert("at the right place")
             console.log($scope.updateLeaveObj.leaves);
             alert($scope.updateLeaveObj.leaves);
-        
-             console.log($scope.employeeDataapi)
-             var EmployeeDetails = JSON.parse(localStorage.getItem("LoggedInemployeeDetails"))
 
-             $scope.updateLeaveObj._id = EmployeeDetails._id
-             $scope.updateLeaveObj.deleteFlag = 'N'
-             console.log($scope.updateLeaveObj);
+            console.log($scope.employeeDataapi)
+            var EmployeeDetails = JSON.parse(localStorage.getItem("LoggedInemployeeDetails"))
 
-             $http({
-                 method: 'POST',
-                url: 'http://leavetrackers.herokuapp.com/recordsroute/updateLeave',
+            $scope.updateLeaveObj._id = EmployeeDetails._id
+            $scope.updateLeaveObj.deleteFlag = 'N'
+            console.log($scope.updateLeaveObj);
+
+            $http({
+                method: 'POST',
+                url: homeAddress + '/recordsroute/updateLeave',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -269,11 +305,11 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
             }).then(function(response) {
                 if (response.status == 200) {
                     console.log("vishal")
-                  //  console.log(response.data.leaves[0]);
+                    //  console.log(response.data.leaves[0]);
                     console.log(response.data.data.leaves);
-                        
-                        $scope.employeeDataapi.leaves = response.data.data.leaves;
-                        $scope.updateLeaveObj.leaves  = [];
+
+                    $scope.employeeDataapi.leaves = response.data.data.leaves;
+                    $scope.updateLeaveObj.leaves = [];
 
                 } else {
                     alert("failed");
@@ -281,12 +317,12 @@ app.controller("getAllRecords", function($scope,$document,$http, factorygetAllRe
             });
         }
         $scope.myArrayOfDates = [];
-    
-}
+
+    }
 
 });
 
-app.controller("userModule", function($scope, $http, $q, $window) {
+app.controller("userModule", function($scope, $http, $q, $window, homeAddress) {
 
     $scope.showPasswordWarning = false;
     $scope.register = {};
@@ -313,7 +349,7 @@ app.controller("userModule", function($scope, $http, $q, $window) {
 
             $http({
                 method: 'POST',
-                url: 'http://leavetrackers.herokuapp.com/recordsroute/createNewEmployee',
+                url: homeAddress + '/recordsroute/createNewEmployee',
                 headers: {
                     'Accept': 'application/json',
                     // "X-Login-Ajax-call": 'true'
@@ -334,16 +370,15 @@ app.controller("userModule", function($scope, $http, $q, $window) {
 
     $scope.loginEmployee = function() {
 
-            if($scope.login.employeeId=='' || $scope.login.password=="")
-            {
-                alert("Please Enter Credentials.")
-                $scope.login = {};
-                return;
-            }
+        if ($scope.login.employeeId == '' || $scope.login.password == "") {
+            alert("Please Enter Credentials.")
+            $scope.login = {};
+            return;
+        }
         localStorage.removeItem('LoggedInemployeeDetails');
         $http({
             method: 'POST',
-            url: 'http://leavetrackers.herokuapp.com/recordsroute/loginUser',
+            url: homeAddress + '/recordsroute/loginUser',
             headers: {
                 'Accept': 'application/json',
                 // "X-Login-Ajax-call": 'true'
@@ -378,3 +413,5 @@ app.controller("userModule", function($scope, $http, $q, $window) {
 
 
 });
+
+  
