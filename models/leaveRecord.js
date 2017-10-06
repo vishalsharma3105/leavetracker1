@@ -8,6 +8,7 @@ var leaveRecord = new Schema({
     managerName: String,
     email:String,
     password:String,
+    admin: Boolean,
     leaves: [{
          //leaveID:String,
          // startDate: Date, 

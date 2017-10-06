@@ -1,9 +1,125 @@
-<div class="container-fluid" ng-controller="getAllRecords">
-    {{5+10}}
-    <span  class="glyphicon glyphicon-minus"></span>
-    <div id="accordianParent" ng-repeat="item in array" ng-click="accordion.current = item._id">
-        {{item.employeeName}}  <span style ="float:right;font-weight: bolder;" ng-show="accordion.current != item._id" >+</span><span style="float:right;font-weight: bolder;" ng-show="accordion.current == item._id" >-</span>
-        <div ng-show="accordion.current == item._id">
-            <div ng-repeat="sub in item.leaves">{{sub.date}}</div>
+<div style="margin-left: 20px;padding-left: 20px;">
+    <div ng-controller="getAllRecords">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Leave Management</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Get All<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Register Yourself</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-click="Employeelogout()">Log Out
+                </button>
+            </div>
+        </nav>
+        <div class="jumbotron" ng-controller="getAllRecords">
+            <h1 class="display-5">Hello, {{employeeData.employeeName}}</h1>
+            <p class="lead">
+                <h6>Employee ID: </h6>{{employeeData.employeeId}}</p>
+            <p class="lead">
+                <h6>Email</h6>{{employeeData.email}}</p>
+            <p class="lead">
+                <h6>Your are currently reporting to : </h6> {{employeeData.managerName}}</p>
+            <h6>You are admin as well </h6>
         </div>
-        <div>
+        <hr class="my-4">
+        <h5>Select filter Cirteria from below</h5>
+        <select id="selectMonth" ng-model="selectedMonth" class="custom-select">
+            <option value="">No Month Selected</option>
+            <option ng-repeat="lt in monthsForDropDown" value="{{lt.Value}}">{{lt.Text}}</option>
+        </select>
+        <select id="selectYear" ng-model="selectedYear" class="custom-select">
+            <option value="">No Year Selected</option>
+            <option ng-repeat="lt in yearsForDropDown" value="{{lt}}">{{lt}}</option>
+        </select>
+        <hr class="my-4">
+        <h4>Number of Leaves in selected Criteria is: {{results.length}}</h4>
+        <hr class="my-4">
+        <div class="row" id="dategrids">
+            <datecard class='col-md-2 col-sm-6 col-xs-10' ng-repeat="a in employeeDataapi.leaves| filter:selectedMonthFilter|filter:selectedYearFilter as results" class="col-2"></datecard>
+        </div>
+        <hr>
+        <!-- modal start -->
+        <!-- modal end -->
+        <button type="submit" class="btn btn-secondary" ng-click="toggleCalenderForLeaves()">Apply Leaves</button>
+        <div ng-show="toggleCalender">
+            <div class="row" id="applyLeaveStart">
+                <div class="col-6">
+                    <multiple-date-picker id="multiple-date-pickerid" week-days-off="[0, 6]" moment="moment" ng-model="updateLeaveObj.leaves"></multiple-date-picker>
+                </div>
+                <div class="col-6">
+                    <div class="row" style="padding-top: 50px;">
+                        <h6>Leave Type:</h6>
+                        <div class="col-4">
+                            <select id="selectLeaveType" ng-model="updateLeaveObj.leaveType" class="custom-select">
+                                <option ng-repeat="lt in leaveTypes">{{lt}}</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" ng-click="updateLeaves()" class="btn btn-primary">
+                                Update Leaves
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Accordian -->
+     <div class="u-wideWrapper u-paddingHm u-paddingTl" >
+
+ 
+
+  <div class="Grid Grid--gutters md-Grid--2col">
+    <div class="Grid-cell u-marginBl">
+    
+
+    <div class="Grid-cell u-marginBl">
+      <h4 class="u-marginVm">Allows multiple sections open at once</h4>
+
+      <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB">
+
+        <v-pane id="{{ ::pane.id }}" ng-repeat="pane in panesA" expanded="pane.isExpanded">
+          <v-pane-header id="{{ ::pane.id }}-header" aria-controls="{{ ::pane.id }}-header">
+            <h5>{{ ::pane.header }}</h5>
+          </v-pane-header>
+
+          <v-pane-content id="{{ ::pane.id }}-content" aria-labelledby="{{ ::pane.id }}-content">
+            <p>{{ ::pane.content }}</p>
+
+            <v-accordion id="nestedAccordionB" multiple ng-if="pane.subpanes">
+             
+            </v-accordion>
+          </v-pane-content>
+        </v-pane>
+
+      </v-accordion>
+
+
+      <div class="ButtonGroup ButtonGroup--hz ButtonGroup--collapse u-marginVm">
+        <div class="ButtonGroup-item">
+          <button class="Button Button--default" ng-click="accordionB.expandAll()">Expand all</button>
+        </div>
+        <div class="ButtonGroup-item">
+          <button class="Button Button--default" ng-click="accordionB.collapseAll()">Collapse all</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  
+
+</div>
+
+    </div>
+</div>

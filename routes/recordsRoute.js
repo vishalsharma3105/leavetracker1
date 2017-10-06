@@ -39,7 +39,8 @@ router.post('/createNewEmployee', function(req, res) {
                 managerId: req.body.managerId,
                 managerName: req.body.managerName,
                 email: req.body.email,
-                password: hashedPasswordValue 
+                password: hashedPasswordValue,
+                admin:false 
                 // ,
                 // leaves: {
 
@@ -83,7 +84,7 @@ router.post('/loginUser', function(req, res) {
     var userLogin1 = new userLogin({
 
         employeeId: req.body.employeeId,
-        password: req.body.password,
+        password: req.body.password
 
     })
     console.log(req.body.employeeId)
@@ -113,7 +114,7 @@ router.post('/loginUser', function(req, res) {
                         "managerId": data.managerId,
                         "managerName": data.managerName,
                         "email": data.email,
-
+                        "admin": data.admin
 
                     }
 

@@ -1,5 +1,5 @@
 <div style="margin-left: 20px;padding-left: 20px;">
-    <div ng-controller="getAllRecords">
+    <div ng-controller="getAllRecords" ng-init="functionGetEmployeeRecord()">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Leave Management</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +44,8 @@
          <hr class="my-4">
         <h4>Number of Leaves in selected Criteria is: {{results.length}}</h4>
         <hr class="my-4">
-        <div class="row" id="dategrids">
-            <datecard ng-repeat="a in employeeDataapi.leaves| filter:selectedMonthFilter|filter:selectedYearFilter as results" class="col-2"></datecard>
+        <div class="row" id="dategrids" >
+            <datecard class='col-md-2 col-sm-6 col-xs-10' ng-repeat="a in employeeDataapi.leaves| filter:selectedMonthFilter|filter:selectedYearFilter as results" class="col-2"></datecard>
         </div>
         <hr>
         <!-- modal start -->
@@ -55,7 +55,7 @@
         <div ng-show="toggleCalender">
             <div class="row" id="applyLeaveStart">
                 <div class="col-6">
-                    <multiple-date-picker id="multiple-date-pickerid" days-not-allowed="['2017-09-05','2017-09-15']" week-days-off="[0, 6]" moment="moment" ng-model="updateLeaveObj.leaves"></multiple-date-picker>
+                    <multiple-date-picker id="multiple-date-pickerid" week-days-off="[0, 6]" moment="moment" ng-model="updateLeaveObj.leaves"></multiple-date-picker>
                 </div>
                 <div class="col-6">
                     <div class="row" style="padding-top: 50px;">

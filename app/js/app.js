@@ -2,7 +2,7 @@ $(function() {
     $("#datepicker").datepicker();
 });
 
-var app = angular.module('app', ['ngRoute', 'multipleDatePicker', 'duScroll'])
+var app = angular.module('app', ['ngRoute', 'multipleDatePicker', 'duScroll', 'vAccordion' , 'ngAnimate' ])
 
 // app.directive("datepicker", function() {
 //     return {
@@ -39,7 +39,7 @@ app.config(function($routeProvider, $locationProvider) {
 
 
     $routeProvider
-        .when('/adminhome', {
+        .when('/admin/getAllRecords', {
             templateUrl: '/views/admin/getAllRecords.html',
             controller: 'getAllRecords'
         })
@@ -80,7 +80,7 @@ app.run(function($rootScope, $location) {
     })
 })
 
-app.constant("homeAddress", "http://leavetrackers.herokuapp.com")
+app.constant("homeAddress", "http://localhost:8000")
 
 app.factory("factorygetAllRecords", function($http, homeAddress) {
 
@@ -147,8 +147,14 @@ app.factory("factorygetEmployeeRecord", function($http, homeAddress) {
 
 
 
+/*
+    Employee Record
 
-app.controller("getAllRecords", function($scope, $document, $http, factorygetAllRecords, factorygetEmployeeRecord, $q, homeAddress) {
+*/
+
+app.controller("getAllRecords", function($scope, $window, $document, $http, factorygetAllRecords, factorygetEmployeeRecord, $q, homeAddress) {
+
+
 
     // array to create month-year dropdown
 
@@ -171,17 +177,17 @@ app.controller("getAllRecords", function($scope, $document, $http, factorygetAll
     $scope.yearsForDropDown = [2017, 2018, 2019, 2020, 2021, 2022]
     alert($scope.getMonths)
 
-        var dateNow = new Date();
-         $scope.currentMonth =  dateNow.getMonth();
-          $scope.currentYear =  dateNow.getFullYear();
-    
-    
+    var dateNow = new Date();
+    $scope.currentMonth = dateNow.getMonth();
+    $scope.currentYear = dateNow.getFullYear();
+
+
 
     //$scope.moment = require('moment');
     //$scope.moment.locale('fr-FR');
     $scope.leaveTypes = ['Sick', 'Casual', 'Floating', 'Earned'];
 
-    
+
 
     $scope.selectedMonthFilter = function(element) {
         var date = new Date(element.date)
@@ -225,16 +231,24 @@ app.controller("getAllRecords", function($scope, $document, $http, factorygetAll
 
     $scope.employeeData = JSON.parse(localStorage.getItem("LoggedInemployeeDetails"));
     $scope.employeeDataapi = "";
-    factorygetEmployeeRecord.then(function(successResponse) {
+    $scope.employeeDataapi = {};
+    $scope.functionGetEmployeeRecord = function() {
+
+        factorygetEmployeeRecord.then(function(successResponse) {
 
 
-        //console.log("getbyid=== " + successResponse);
-        $scope.employeeDataapi = successResponse;
+            //console.log("getbyid=== " + successResponse);
+            $scope.employeeDataapi = successResponse;
 
 
 
 
-    })
+        })
+    }
+    $scope.Employeelogout = function() {
+
+        localStorage.removeItem('LoggedInemployeeDetails', $window.location.href = '/#!/login', $scope.employeeDataapi.leaves = {});
+    }
 
     //function to delete leaves
     $scope.deleteLeave = function(id) {
@@ -275,11 +289,15 @@ app.controller("getAllRecords", function($scope, $document, $http, factorygetAll
 
             alert("Leave Type is Empty");
             $scope.updateLeaveObj.leaves = [];
+            $scope.updateLeaveObj.leaveType = '';
 
         } else {
 
             // to check of leaves dates are already applied:
 
+
+            console.log($scope.employeeDataapi);
+            console.log($scope.updateLeaveObj);
 
             console.log($scope.updateLeaveObj.leaves);
 
@@ -316,12 +334,61 @@ app.controller("getAllRecords", function($scope, $document, $http, factorygetAll
                 }
             });
         }
-        $scope.myArrayOfDates = [];
+        $scope.updateLeaveObj = {}
 
     }
 
+
+    // Accordian
+
+
+      $scope.panesA = [
+        {
+          id: 'pane-1a',
+          header: 'Vishal',
+          content: '29-June 2017',
+          isExpanded: true
+        },
+        {
+          id: 'pane-2a',
+          header: 'Vishal ss',
+          content: '29-June 2018'
+        },
+        {
+          id: 'pane-3a',
+          header: 'Vishal sssss',
+          content: 'jjfjfjfj',
+
+         
+        }
+      ];
+
+  $scope.expandCallback = function (index, id) {
+        console.log('expand:', index, id);
+      };
+
+      $scope.collapseCallback = function (index, id) {
+        console.log('collapse:', index, id);
+      };
+
+      $scope.$on('accordionB:onReady', function () {
+        console.log('accordionA is ready!');
+      });
+
 });
 
+
+
+
+
+
+
+
+/*
+    User Module
+
+
+*/
 app.controller("userModule", function($scope, $http, $q, $window, homeAddress) {
 
     $scope.showPasswordWarning = false;
@@ -388,8 +455,17 @@ app.controller("userModule", function($scope, $http, $q, $window, homeAddress) {
             if (response.status == 200) {
                 if (response.data.success == true) {
                     $scope.login = {};
+                    console.log("details coming")
+                    console.log(response.data)
+                    console.log(JSON.stringify(response.data.details))
+                    alert(JSON.stringify(response.data.details.admin))
+
                     localStorage.setItem('LoggedInemployeeDetails', JSON.stringify(response.data.details));
-                    $window.location.href = '/#!/employee/myleaves';
+                    if (response.data.details.admin == true) {
+                        $window.location.href = '/#!/admin/getAllRecords';
+                    } else {
+                        $window.location.href = '/#!/employee/myleaves';
+                    }
                     alert(response.data.details.employeeId);
                 } else {
                     alert("failed")
@@ -399,19 +475,14 @@ app.controller("userModule", function($scope, $http, $q, $window, homeAddress) {
                 alert("failed");
             }
         });
-
-
     }
 
 
     $scope.Employeelogout = function() {
 
         localStorage.removeItem('LoggedInemployeeDetails', $window.location.href = '/#!/login');
-
     }
 
 
 
 });
-
-  
