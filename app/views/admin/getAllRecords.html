@@ -74,26 +74,36 @@
             </div>
         </div>
         <!-- Accordian -->
-     <div class="u-wideWrapper u-paddingHm u-paddingTl" >
+        <div class="u-wideWrapper u-paddingHm u-paddingTl">
+            <div class="Grid Grid--gutters md-Grid col-md-12 col-sm-12 col-xs-12">
+                <div class="Grid-cell u-marginBl">
+                    <div class="Grid-cell u-marginBl">
+                        <h4 class="u-marginVm">Records of other TCS resources</h4>
+                        <h6 class="u-marginVm">You are seeing this because you are tagged as manager in system</h4>
 
- 
 
-  <div class="Grid Grid--gutters md-Grid--2col">
-    <div class="Grid-cell u-marginBl">
-    
-
-    <div class="Grid-cell u-marginBl">
-      <h4 class="u-marginVm">Allows multiple sections open at once</h4>
-
+      	   <div class="ButtonGroup ButtonGroup--hz ButtonGroup--collapse u-marginVm">
+        <div class="ButtonGroup-item">
+          <button class="Button Button--default" ng-click="accordionB.expandAll()">Expand all</button>
+        </div>
+        <div class="ButtonGroup-item">
+          <button class="Button Button--default" ng-click="accordionB.collapseAll()">Collapse all</button>
+        </div>
+      </div>
       <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB">
 
-        <v-pane id="{{ ::pane.id }}" ng-repeat="pane in panesA" expanded="pane.isExpanded">
+        <v-pane id="{{ ::pane.id }}" ng-repeat="pane in array" expanded="pane.isExpanded">
           <v-pane-header id="{{ ::pane.id }}-header" aria-controls="{{ ::pane.id }}-header">
-            <h5>{{ ::pane.header }}</h5>
+            <h5>  {{ pane.employeeName }} </h5>
           </v-pane-header>
 
           <v-pane-content id="{{ ::pane.id }}-content" aria-labelledby="{{ ::pane.id }}-content">
-            <p>{{ ::pane.content }}</p>
+          <p>{{ pane.employeeId }} </p>
+            <div class="row" id="dategrids" >
+
+            <datecard class='col-md-2 col-sm-6 col-xs-10' ng-repeat="a in pane.leaves| filter:selectedMonthFilter|filter:selectedYearFilter as results" class="col-2"></datecard>
+        </div>
+            
 
             <v-accordion id="nestedAccordionB" multiple ng-if="pane.subpanes">
              
@@ -104,14 +114,7 @@
       </v-accordion>
 
 
-      <div class="ButtonGroup ButtonGroup--hz ButtonGroup--collapse u-marginVm">
-        <div class="ButtonGroup-item">
-          <button class="Button Button--default" ng-click="accordionB.expandAll()">Expand all</button>
-        </div>
-        <div class="ButtonGroup-item">
-          <button class="Button Button--default" ng-click="accordionB.collapseAll()">Collapse all</button>
-        </div>
-      </div>
+   
     </div>
   </div>
 
