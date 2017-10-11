@@ -1,0 +1,86 @@
+<div >
+    <div ng-controller="getAllRecords">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Leave Management</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Admin Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!/assignAdmin">Assign Admin Rights</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" ng-click="Employeelogout()">Log Out
+                </button>
+            </div>
+        </nav>
+        <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+        <div class="jumbotron" ng-controller="getAllRecords">
+            <h1 class="display-5">Hello, {{employeeData.employeeName}}</h1>
+            <p class="lead">
+                <h6>Employee ID: </h6>{{employeeData.employeeId}}</p>
+            <p class="lead">
+                <h6>Email</h6>{{employeeData.email}}</p>
+            <p class="lead">
+                <h6>Your are currently reporting to : </h6> {{employeeData.managerName}}</p>
+            <h6>You are admin as well </h6>
+            </div>
+        </div>
+        </div>
+        <hr class="my-4">
+        <div class="row" style="margin-top: 20px">
+            <div class="col"></div>
+            <div class="col-md-4 col-xs-11 col-sm-6">
+                <h3>Make Admin</h3>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Enter Employee ID </label>
+                    <input type="Text" ng-model="srch.employeeId" class="form-control" id="exampleInputEmail1" placeholder="Enter EmployeeID">
+                </div>
+                <button type="submit" ng-click="SearchEmployee()" class="btn btn-primary">Search</button>
+            </div>
+            <div class="col">
+            
+            </div>
+        </div>
+             <div class="row" style="margin-top: 20px">
+            <div class="col"></div>
+            <div class="col-md-4 col-xs-11 col-sm-6" ng-show="showSearchResults">
+    
+                <table class="table">
+  <thead class="thead-inverse">
+    <tr>
+      
+      <th>Employee ID</th>
+      <th>Employee Name</th>
+      <th>Manager Name</th>
+       <th>Manager ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{searchedEmployeeDetails.employeeId}}</td>
+      <td>{{searchedEmployeeDetails.employeeName}}</td>
+      <td>{{searchedEmployeeDetails.managerName}}</td>
+      <td>{{searchedEmployeeDetails.managerId}}</td>
+    </tr>
+   
+  </tbody>
+</table>
+
+                <button type="submit" ng-click="assignAdmin(searchedEmployeeDetails)" class="btn btn-primary">assignAdmin</button>
+            </div>
+            <div class="col">
+                
+                
+            </div>
+        </div>
+    </div>
+</div>

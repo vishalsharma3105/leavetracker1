@@ -63,6 +63,10 @@ app.config(function($routeProvider, $locationProvider) {
             templateUrl: '/views/loggedin/myleaves.html',
             controller: 'userModule'
         })
+        .when('/admin/assignAdmin', {
+            templateUrl: '/views/admin/assignAdmin.html',
+            controller: 'getAllRecords'
+        })
         .otherwise({
             redirectTo: '/login'
         });
@@ -80,7 +84,7 @@ app.run(function($rootScope, $location) {
     })
 })
 
-app.constant("homeAddress", "http://leavetrackers.herokuapp.com")
+app.constant("homeAddress", "http://localhost:8000")
 
 app.factory("factorygetAllRecords", function($http, homeAddress) {
 
@@ -154,9 +158,115 @@ app.factory("factorygetEmployeeRecord", function($http, homeAddress) {
 
 app.controller("getAllRecords", function($scope, $window, $document, $http, factorygetAllRecords, factorygetEmployeeRecord, $q, homeAddress) {
 
+    $scope.searchedEmployeeDetails = {}
+    $scope.showSearchResults = false
+    // method to search user 
+    $scope.SearchEmployee = function(){
+            if ($scope.srch.employeeId == '') {
+            alert("Please Enter employeeID.")
+            return;
+        }
+        $http({
+            method: 'POST',
+            url: homeAddress + '/recordsroute/searchUser',
+            headers: {
+                'Accept': 'application/json',
+                // "X-Login-Ajax-call": 'true'
+            },
+            data: JSON.stringify($scope.srch)
+        }).then(function(response) {
+            if (response.status == 200) {
+                if (response.data.success == true) {
+                    $scope.login = {};
+                    console.log("details coming")
+                    console.log(response.data)
+                   // console.log(JSON.stringify(response.data.details))
+                    //alert(JSON.stringify(response.data.details.admin))
 
+                   
+                    $scope.searchedEmployeeDetails = response.data.data[0]
+                    console.log($scope.searchedEmployeeDetails)
+                    $scope.showSearchResults = true
+
+                } else {
+                    alert("No user found")
+                    
+                }
+            } else {
+                alert("some issue with the service.. try again");
+            }
+        });
+
+
+
+    }
+
+
+    // assign admin to user
+     $scope.assignAdmin = function(searchedEmployeeDetails){
+        console.log(searchedEmployeeDetails)
+            if (searchedEmployeeDetails._id == '') {
+            alert("Some issue occured... try again")
+            return;
+        }
+        
+        $http({
+            method: 'POST',
+            url: homeAddress + '/recordsroute/assignAdmin',
+            headers: {
+                'Accept': 'application/json',
+                // "X-Login-Ajax-call": 'true'
+            },
+            data: JSON.stringify(searchedEmployeeDetails)
+        }).then(function(response) {
+            if (response.status == 200) {
+                if (response.data.success == true) {
+                    $scope.login = {};
+                    console.log("details coming")
+                    console.log(response.data)
+                   // console.log(JSON.stringify(response.data.details))
+                    //alert(JSON.stringify(response.data.details.admin))
+
+                   
+                  //  $scope.searchedEmployeeDetails = response.data.data[0]
+                    alert( $scope.searchedEmployeeDetails.employeeName + "  is now Admin and can view other users details")
+                  //  $scope.showSearchResults = true
+                } else {
+                    alert("No user found")
+                    
+                }
+            } else {
+                alert("some issue with the service.. try again");
+            }
+        });
+
+
+
+    }
+
+
+    $scope.sendSnapShot = function(){
+
+                     html2canvas(document.getElementById('dategrids')).then(function(canvas) {
+                        //document.body.appendChild(canvas);
+                        var email = "vishalsharma3105@gmail.com";
+                        var subject = "hello sharmaji";
+                       // console.log(canvas.toDataURL())
+                     
+                        var emailBody = "<image src=" + canvas.toDataURL+ " />";
+                        document.location = "mailto:"+email+"?subject="+subject+"&body="+emailBody;
+                    
+   });
+
+
+    }
 
     // array to create month-year dropdown
+
+    $scope.routeToAssignAdmin = function()
+    {
+        $window.location.href = '/#!/admin/assignAdmin';
+    }
 
     $scope.monthsForDropDown = [
         { Value: 0, Text: 'Januaury' },
@@ -174,8 +284,11 @@ app.controller("getAllRecords", function($scope, $window, $document, $http, fact
     ]
 
 
+
     $scope.yearsForDropDown = [2017, 2018, 2019, 2020, 2021, 2022]
-    alert($scope.getMonths)
+
+
+   
 
     var dateNow = new Date();
     $scope.currentMonth = dateNow.getMonth();

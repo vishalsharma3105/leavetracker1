@@ -1,4 +1,4 @@
-<div style="margin-left: 20px;padding-left: 20px;">
+<div >
     <div ng-controller="getAllRecords">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Leave Management</a>
@@ -8,10 +8,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Get All<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Admin Home<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Register Yourself</a>
+                        <a class="nav-link" ng-click="routeToAssignAdmin()">Assign Admin Rights</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">Disabled</a>
@@ -80,7 +80,18 @@
                     <div class="Grid-cell u-marginBl">
                         <h4 class="u-marginVm">Records of other TCS resources</h4>
                         <h6 class="u-marginVm">You are seeing this because you are tagged as manager in system</h4>
+ <hr class="my-4">
+        <h5>Select filter Cirteria from below</h5>
+        <select id="selectMonth" ng-model="selectedMonth"  class="custom-select">
 
+            <option value="" >No Month Selected</option>      
+            <option ng-repeat="lt in monthsForDropDown"   value="{{lt.Value}}">{{lt.Text}}</option>
+        </select>
+        <select id="selectYear" ng-model="selectedYear" class="custom-select">
+            <option value="" >No Year Selected</option> 
+            <option ng-repeat="lt in yearsForDropDown" value ="{{lt}}">{{lt}}</option>
+        </select>
+         <hr class="my-4">
 
       	   <div class="ButtonGroup ButtonGroup--hz ButtonGroup--collapse u-marginVm">
         <div class="ButtonGroup-item">

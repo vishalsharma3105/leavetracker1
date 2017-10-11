@@ -1,4 +1,4 @@
-<div style="margin-left: 20px;padding-left: 20px;">
+<div >
     <div ng-controller="getAllRecords" ng-init="functionGetEmployeeRecord()">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">Leave Management</a>
@@ -47,6 +47,9 @@
         <div class="row" id="dategrids" >
             <datecard class='col-md-2 col-sm-6 col-xs-10' ng-repeat="a in employeeDataapi.leaves| filter:selectedMonthFilter|filter:selectedYearFilter as results" class="col-2"></datecard>
         </div>
+         <button type="submit" ng-click="sendSnapShot()" class="btn btn-primary">
+                                Send SnapShot For Approval
+                            </button>
         <hr>
         <!-- modal start -->
         <!-- modal end -->

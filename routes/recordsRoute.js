@@ -40,7 +40,7 @@ router.post('/createNewEmployee', function(req, res) {
                 managerName: req.body.managerName,
                 email: req.body.email,
                 password: hashedPasswordValue,
-                admin:false 
+                admin: false
                 // ,
                 // leaves: {
 
@@ -135,7 +135,7 @@ router.post('/loginUser', function(req, res) {
                     })
                 } else {
 
-                    res.json({success:false,message:"Paasword is Wrong baby"})
+                    res.json({ success: false, message: "Paasword is Wrong baby" })
                 }
             });
         }
@@ -167,9 +167,9 @@ hashedPassword = function(password) {
 // Employee can update his leave from here.
 router.post('/updateLeave', function(req, res) {
     console.log(req.body)
-    if (!req.body._id || req.body.leaves.length===0) {
+    if (!req.body._id || req.body.leaves.length === 0) {
         res.json({
-            success: false, 
+            success: false,
             msg: "Data not provided"
         })
     } else {
@@ -182,20 +182,19 @@ router.post('/updateLeave', function(req, res) {
             })
 
             else {
-                 console.log("yahan tak  b  agaya");
-                var i =0
-                for(i=0;i<req.body.leaves.length;i++)
-                {
+                console.log("yahan tak  b  agaya");
+                var i = 0
+                for (i = 0; i < req.body.leaves.length; i++) {
                     var leaveObject = {
-                        date:req.body.leaves[i],
-                        leaveType:req.body.leaveType,
-                        timeStamp:Date(),
-                        deleteFlag:'N'
-                    } 
+                        date: req.body.leaves[i],
+                        leaveType: req.body.leaveType,
+                        timeStamp: Date(),
+                        deleteFlag: 'N'
+                    }
                     data.leaves.push(leaveObject);
 
                 }
-                    
+
                 data.save(function(err, newData) {
                     if (err)
 
@@ -266,17 +265,13 @@ router.post('/getbyId', function(req, res) {
         else {
             //data.status = 'done'
             //data.completed_date = new Date()
-           // console.log(data.leaves[0]._id)
+            // console.log(data.leaves[0]._id)
             res.json(data)
 
 
 
         }
     })
-
-
-
-
 
 })
 
@@ -337,6 +332,81 @@ router.post('/deleteLeavesbyId', function(req, res) {
 
 
 
+// Assign new Admin service method 1- Search user
 
+router.post('/searchUser', function(req, res) {
+            console.log(req.body)
+            if (!req.body.employeeId) {
+                res.json({
+                    success: false,
+                    msg: "Data not provided"
+                })
+            } else {
+                leaveRecords.find({ employeeId: req.body.employeeId }, function(err, data) {
+                        console.log("yahan tak agaya");
+                        if (err) res.status(500).json({
 
-module.exports = router;
+                            success: false,
+                            msg: "Database error"
+                        })
+
+                        else {
+                                console.log("yahan tk b agaya")
+                                console.log(data); 
+                                res.json({
+                                    success: true,
+                                    data: data
+                                })
+                            }
+
+                        })
+
+                }
+            })
+
+        // assign admin method 2 ; assign admin part
+        router.post('/assignAdmin', function(req, res) {
+         
+            if (!req.body._id) {
+                res.json({
+                    success: false,
+                    msg: "Data not provided"
+                })
+            } else {
+                leaveRecords.findById({ _id: req.body._id }, function(err, data) {
+                    console.log("yahan tak agaya");
+                    if (err) res.status(500).json({
+
+                        success: false,
+                        msg: "Database error"
+                    })
+
+                    else {
+                        console.log(data)
+                        //console.log(data[0].employeeId)
+                        data.admin = true
+
+                        data.save(function(err, newData) {
+                            if (err)
+
+                                //    next();
+                                res.status(500).json({
+                                    success: false,
+                                    msg: "Database error"
+                                })
+                            else {
+                                res.json({
+                                    success: true,
+                                    data: newData
+                                })
+                            }
+                        })
+
+                    }
+
+                })
+
+            }
+        })
+
+        module.exports = router;
