@@ -84,7 +84,7 @@ app.run(function($rootScope, $location) {
     })
 })
 
-app.constant("homeAddress", "http://localhost:8000")
+app.constant("homeAddress", "http://leavetrackers.herokuapp.com")
 
 app.factory("factorygetAllRecords", function($http, homeAddress) {
 
